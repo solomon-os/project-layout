@@ -14,6 +14,13 @@ Traducciones:
 * [Română](README_ro.md)
 * [Русский](README_ru.md)
 * [Türkçe](README_tr.md)
+* [Italiano](README_it.md)
+* [Vietnamese](README_vi.md)
+* [Українська](README_ua.md)
+* [Indonesian](README_id.md)
+* [हिन्दी](README_hi.md)
+* [Беларуская](README_be.md)
+* [বাংলা](README_bn.md)
 
 ## Resumen
 
@@ -21,7 +28,7 @@ Este es un diseño básico para proyectos de aplicaciones de Go. No es un están
 
 Si está tratando de aprender Go o si está construyendo un PoC o un proyecto de juguete para usted, este diseño del proyecto es excesivo. Comience con algo realmente simple (un solo archivo `main.go` es más que suficiente). A medida que su proyecto crezca, tenga en cuenta que será importante asegurarse de que su código esté bien estructurado, de lo contrario, terminará con un código desordenado con muchas dependencias ocultas y un estado global. Cuando tenga más personas trabajando en el proyecto, necesitará aún más estructura. Ahí es cuando es importante introducir una forma común de administrar paquetes / bibliotecas. Cuando tienes un proyecto de código abierto o cuando sabes que otros proyectos importan el código del repositorio de tu proyecto, es cuando es importante tener paquetes y código privados (también conocidos como `internal`). ¡Clona el repositorio, guarda lo que necesitas y elimina todo lo demás! El hecho de que esté allí no significa que tenga que usarlo todo. Ninguno de estos patrones se utiliza en todos los proyectos. Incluso el patrón `vendor` no es universal.
 
-Con Go 1.14, [`los módulos Go`](https://github.com/golang/go/wiki/Modules) están finalmente listos para la producción. Use [`los módulos Go`](https://blog.golang.org/using-go-modules) a menos que tenga una razón específica para no usarlos y, si lo hace, no debe preocuparse por $ GOPATH y dónde coloque su proyecto. El archivo `go.mod` básico en el repositorio asume que su proyecto está alojado en GitHub, pero no es un requisito. La ruta del módulo puede ser cualquier cosa, aunque el primer componente de la ruta del módulo debe tener un punto en su nombre (la versión actual de Go ya no lo aplica, pero si está utilizando versiones un poco más antiguas, no se sorprenda si sus compilaciones fallan sin eso). Consulte los problemas [`37554`](https://github.com/golang/go/issues/37554) y [`32819`](https://github.com/golang/go/issues/32819) si desea obtener más información al respecto.
+Con Go 1.14, [`los módulos Go`](https://go.dev/wiki/Modules) están finalmente listos para la producción. Use [`los módulos Go`](https://blog.golang.org/using-go-modules) a menos que tenga una razón específica para no usarlos y, si lo hace, no debe preocuparse por $ GOPATH y dónde coloque su proyecto. El archivo `go.mod` básico en el repositorio asume que su proyecto está alojado en GitHub, pero no es un requisito. La ruta del módulo puede ser cualquier cosa, aunque el primer componente de la ruta del módulo debe tener un punto en su nombre (la versión actual de Go ya no lo aplica, pero si está utilizando versiones un poco más antiguas, no se sorprenda si sus compilaciones fallan sin eso). Consulte los problemas [`37554`](https://github.com/golang/go/issues/37554) y [`32819`](https://github.com/golang/go/issues/32819) si desea obtener más información al respecto.
 
 Este diseño de proyecto es intencionalmente genérico y no intenta imponer una estructura de paquete Go específica.
 
@@ -31,7 +38,7 @@ Si necesita ayuda con el nombre, el formato y el estilo, comience ejecutando `go
 * https://talks.golang.org/2014/names.slide
 * https://golang.org/doc/effective_go.html#names
 * https://blog.golang.org/package-names
-* https://github.com/golang/go/wiki/CodeReviewComments
+* https://go.dev/wiki/CodeReviewComments
 * [Guía de estilo para paquetes Go](https://rakyll.org/style-packages) (rakyll/JBD)
 
 Consulte [`Diseño de proyecto de Go`](https://medium.com/golang-learn/go-project-layout-e5213cdcfaa2) para obtener información adicional sobre los antecedentes.
@@ -68,7 +75,7 @@ Opcionalmente, puede agregar un poco de estructura adicional a sus paquetes inte
 
 ### `/pkg`
 
-Código de biblioteca que puede usar aplicaciones externas (por ejemplo, `/pkg/mypubliclib`). Otros proyectos importarán estas bibliotecas esperando que funcionen, así que piénselo dos veces antes de poner algo aquí :-) Tenga en cuenta que el directorio `internal` es la mejor manera de asegurarse de que sus paquetes privados no se puedan importar porque Go lo aplica. El directorio `/pkg` sigue siendo una buena forma de comunicar explícitamente que el código de ese directorio es seguro para que lo utilicen otros. La publicación del blog de Travis Jeffery, [`I'll take pkg over internal`](https://travisjeffery.com/b/2019/11/i-ll-take-pkg-over-internal/), proporciona una buena descripción de los directorios `pkg` e `internal` y de cuándo podría tener sentido usarlos.
+Código de biblioteca que puede usar aplicaciones externas (por ejemplo, `/pkg/mypubliclib`). Otros proyectos importarán estas bibliotecas esperando que funcionen, así que piénselo dos veces antes de poner algo aquí :-) Tenga en cuenta que el directorio `internal` es la mejor manera de asegurarse de que sus paquetes privados no se puedan importar porque Go lo aplica. El directorio `/pkg` sigue siendo una buena forma de comunicar explícitamente que el código de ese directorio es seguro para que lo utilicen otros. La publicación del blog de Travis Jeffery, [`I'll take pkg over internal`](https://travisjeffery.com/ill-take-pkg-over-internal/), proporciona una buena descripción de los directorios `pkg` e `internal` y de cuándo podría tener sentido usarlos.
 
 También es una forma de agrupar el código de Go en un solo lugar cuando su directorio raíz contiene muchos componentes y directorios que no son de Go, lo que facilita la ejecución de varias herramientas de Go (como se menciona en estas charlas: [`Best Practices for Industrial Programming`](https://www.youtube.com/watch?v=PTE4VJIdHPg) de GopherCon EU 2018, [GopherCon 2018: Kat Zien - How Do You Structure Your Go Apps](https://www.youtube.com/watch?v=oL6JBUk6tj0) y [GoLab 2018 - Massimiliano Pippi - Project layout patterns in Go](https://www.youtube.com/watch?v=3gQa1LWwuzk)).
 
@@ -78,7 +85,7 @@ Está bien no usarlo si el proyecto de su aplicación es realmente pequeño y do
 
 ### `/vendor`
 
-Dependencias de aplicaciones (administradas manualmente o mediante su herramienta de administración de dependencias favorita, como la nueva función de [`Módulos Go`](https://github.com/golang/go/wiki/Modules) integrada). El comando `go mod vendor` creará el directorio `/vendor` por usted. Tenga en cuenta que es posible que deba agregar la marca `-mod=vendor` a su comando `go build` si no está usando Go 1.14 donde está activado de forma predeterminada.
+Dependencias de aplicaciones (administradas manualmente o mediante su herramienta de administración de dependencias favorita, como la nueva función de [`Módulos Go`](https://go.dev/wiki/Modules) integrada). El comando `go mod vendor` creará el directorio `/vendor` por usted. Tenga en cuenta que es posible que deba agregar la marca `-mod=vendor` a su comando `go build` si no está usando Go 1.14 donde está activado de forma predeterminada.
 
 No adicione las dependencias de su aplicación si está creando una biblioteca.
 
@@ -114,7 +121,7 @@ Configuraciones de inicio del sistema (systemd, upstart, sysv) y administración
 
 Scripts para realizar varias operaciones de construcción, instalación, análisis, etc.
 
-Estos scripts mantienen el Makefile de nivel raíz pequeño y simple (p.ej, [`https://github.com/hashicorp/terraform/blob/master/Makefile`](https://github.com/hashicorp/terraform/blob/master/Makefile)).
+Estos scripts mantienen el Makefile de nivel raíz pequeño y simple (p.ej, [`https://github.com/hashicorp/terraform/blob/main/Makefile`](https://github.com/hashicorp/terraform/blob/main/Makefile)).
 
 Consulte el directorio `/scripts` para ver ejemplos.
 
